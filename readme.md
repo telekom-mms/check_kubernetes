@@ -1,5 +1,7 @@
 # Nagios/Icinga Checks for Kubernetes
 
+[![Build Status](https://travis-ci.org/T-Systems-MMS/check_kubernetes.svg?branch=master)](https://travis-ci.org/T-Systems-MMS/check_kubernetes)
+
 You will need a kubeconfig file for both checks.
 
 ## Python Compatibility
