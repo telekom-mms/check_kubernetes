@@ -19,7 +19,7 @@ script:
     if [ -z "$TRAVIS_TAG" ]; then
       export version_number="dev-${TRAVIS_COMMIT}"
     else
-      export version_number="${$TRAVIS_TAG}"
+      export version_number="${TRAVIS_TAG}"
     fi
 
     echo "Version ${version_number}"
