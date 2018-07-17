@@ -1,0 +1,7 @@
+/dist
+*.rpm
+/.idea
+/*.iml
+*.pyc
+/env
+/build

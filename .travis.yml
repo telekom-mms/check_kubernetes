@@ -1,0 +1,45 @@
+language: python
+
+python:
+  - '2.7'
+  - '3.4'
+  - '3.5'
+  - '3.6'
+  - '3.7-dev'
+
+matrix:
+  allow_failures:
+    - python: '3.7-dev'
+
+install:
+  - pip install -r requirements-dev.txt
+
+script:
+  - |
+    if [ -z "$TRAVIS_TAG" ]; then
+      export version_number="dev-${TRAVIS_COMMIT}"
+    else
+      export version_number="${$TRAVIS_TAG}"
+    fi
+
+    echo "Version ${version_number}"
+
+    echo "__version__ = '${version_number}'" > ./version.py
+
+  - python ./test_check_nodes.py
+  - python ./test_check_pods.py
+  - pyinstaller check_pods.py --clean --onefile --hidden-import nagiosplugin.platform.posix
+  - pyinstaller check_nodes.py --clean --onefile --hidden-import nagiosplugin.platform.posix
+
+deploy:
+  provider: releases
+  api_key:
+    secure: XslaczKUxjcyP2+ooJ6bVMnF/B/mA9WacDxdqB+WW3oVRoxHMrp6ZDPCj4xfH3N/P+sqCgbGskxz1w0Rxt9JEdyeC31uCkPPzaPbVQIryiJewh5XkScZ7DyBgsFCR93NwYUBFeGo81D/sPFWkz+mWXtvZBnvdDboL2OOwxZTLyPYaQjsaxELc1s2LEUrwc+lV6LPWK52bdOUXlgyxLL9QiZJH3Y/KRehNe6ev23VxVLCb9UMnm/VofI7C4L14sV17Fz1VmvriTpWjAsj36m4cG3dacYzAdYaxE6ul88b5sbXIKG7kgkvBn3eU6MYJ2ZLrUjUFBMo4xFve6pwLJ76vTqOz81l+9FxRt+QJ9bq5/Hn5DSuoQZG3u+IL5AmzErS/FmxtC9MpEGDsHHzxLk4USziDx+S6ZYBGRx2QEsx70ut4biPbtC5jCMTOL2GI8EcdEyFZCMALOmF56JJeD1wL63748u1Diy/SvGXJcNySozx64RNflvlMmmBUN9XRtCX6MyAV/90o76nrNI/1u0+lEfwkPJT1ePwWdWeMPhZBxvczJ5QUyp+3prlx7pkyE2aUD9KvNueijTsh47DxX4FDAvpwbT5l/ZiD/VeE/ZdLagGFvPlzxQN6/DgkmKaahODs1VQkRZ4OUr5i8Lsm4HK9zU/IqLU5kfG/gccTcmCOzo=
+  skip_cleanup: true
+  file_glob: true
+  file: dist/*
+  on:
+    repo: T-Systems-MMS/check_kubernetes
+    tags: true
+    branch: master
+    python: '3.6'
