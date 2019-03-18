@@ -8,7 +8,7 @@ nodes_all_ok = [
         status=mock.Mock(
             conditions=[
                 mock.Mock(type='Ready', status='True'),
-                mock.Mock(type='OutOfDisk', status='False'),
+                mock.Mock(type='DiskPressure', status='False'),
             ],
         )
     ),
@@ -16,7 +16,7 @@ nodes_all_ok = [
         status=mock.Mock(
             conditions=[
                 mock.Mock(type='Ready', status='True'),
-                mock.Mock(type='OutOfDisk', status='False'),
+                mock.Mock(type='DiskPressure', status='False'),
             ],
         )
     ),
@@ -27,7 +27,7 @@ nodes_one_problem = [
         status=mock.Mock(
             conditions=[
                 mock.Mock(type='Ready', status='True'),
-                mock.Mock(type='OutOfDisk', status='True'),
+                mock.Mock(type='DiskPressure', status='True'),
             ],
         )
     ),
@@ -35,7 +35,7 @@ nodes_one_problem = [
         status=mock.Mock(
             conditions=[
                 mock.Mock(type='Ready', status='True'),
-                mock.Mock(type='OutOfDisk', status='False'),
+                mock.Mock(type='DiskPressure', status='False'),
             ],
         )
     ),

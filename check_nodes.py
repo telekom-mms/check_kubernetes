@@ -26,6 +26,11 @@ class Nodes(nagiosplugin.Resource):
         for node in kube.list_node().items:
             self.nodes.append(node)
             for condition in node.status.conditions:
+                # OutOfDisk is not postet in k8s > 1.12, but is still listet in node status contitions,
+                # see https://github.com/kubernetes/kubernetes/pull/72507
+                if condition.type == "OutOfDisk":
+                    continue
+
                 if (condition.type == 'Ready' and condition.status != 'True') \
                 or (condition.type != 'Ready' and condition.status != 'False'):
                     self.nodes_with_problems.append(node)
