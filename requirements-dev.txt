@@ -2,3 +2,5 @@ kubernetes
 nagiosplugin
 mock
 pyinstaller
+six>=0.11
+setuptools
