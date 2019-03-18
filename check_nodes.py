@@ -34,10 +34,11 @@ class Nodes(nagiosplugin.Resource):
                 if (condition.type == 'Ready' and condition.status != 'True') \
                 or (condition.type != 'Ready' and condition.status != 'False'):
                     self.nodes_with_problems.append(node)
+                    break
 
         return [
-            nagiosplugin.Metric('problem_nodes', len(set(self.nodes_with_problems)), min=0),
-            nagiosplugin.Metric('all_nodes', len(set(self.nodes)), min=0),
+            nagiosplugin.Metric('problem_nodes', len(self.nodes_with_problems), min=0),
+            nagiosplugin.Metric('all_nodes', len(self.nodes), min=0),
         ]
 
 
