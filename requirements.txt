@@ -1,2 +1,2 @@
-kubernetes
+kubernetes>=9.0.0
 nagiosplugin
