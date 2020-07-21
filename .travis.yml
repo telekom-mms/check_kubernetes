@@ -3,14 +3,14 @@ language: python
 
 python:
   - '2.7'
-  - '3.5'
   - '3.6'
   - '3.7'
-  - '3.8-dev'
+  - '3.8'
+  - '3.9-dev'
 
 matrix:
   allow_failures:
-    - python: '3.8-dev'
+    - python: '3.9-dev'
 
 install:
   - pip install -U -r requirements-dev.txt
@@ -43,4 +43,4 @@ deploy:
     repo: T-Systems-MMS/check_kubernetes
     tags: true
     branch: master
-    python: '3.7'
+    python: '3.8'

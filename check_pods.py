@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Check for Kubernetes Pods
 """
