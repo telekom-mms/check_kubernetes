@@ -5,5 +5,5 @@ metadata:
   name: icinga-monitoring
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["pods", "nodes"]
   verbs: ["get", "watch", "list"]

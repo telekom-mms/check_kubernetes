@@ -1,5 +1,4 @@
 # Installation Instructions 
-
 ## Pre-Requisites
 - Monitoring-User (nagios) with Home-Dir (/home/nagios) is setup 
 - NRPE is working correctly 
@@ -51,7 +50,7 @@ metadata:
   name: icinga-monitoring
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["pods", "nodes"]
   verbs: ["get", "watch", "list"]
 ```
 
@@ -124,7 +123,32 @@ The user running the script must have the kubernetes connection and privileges t
 on cluster level ex. root   
 
 ```bash
-chmod u+x get_config.sh
-./get_config.sh > /home/nagios/kube-config  
+[root@host ~]# chmod u+x get_config.sh
+[root@host ~]# ./get_config.sh > /home/nagios/kube-config
+[root@host ~]# chown nagios.nagios /home/nagios/kube-config
+[root@host ~]# chmod 0600 /home/nagios/kube-config 
 ```
 
+## Testing the newly created service account 
+You can test service account configuration by running the check manually.
+
+```bash 
+[nagios@host ~]$ cd /home/nagios/
+[nagios@host nagios]$ ls
+bin  check_kubernetes  k8s_mon_venv  kube-config
+[nagios@host nagios]$ cd check_kubernetes/
+[nagios@host check_kubernetes]$ ./check_nodes --kube-config ../kube-config
+NODES OK - problem_nodes is 0 | all_nodes=5;;;0 problem_nodes=0;1;2;0
+[nagios@host check_kubernetes]$ ./check_pods --kube-config ../kube-config
+PODS OK - 0 Pods Pending, 28 Pods Running, 0 Pods Succeeded, 0 Pods Failed, 0 Pods Unknown | Failed=0;;;0 Pending=0;;;0 Running=28;;;0 Succeeded=0;;;0 Unknown=0;;;0
+[nagios@host check_kubernetes]$
+```
+
+# Troubleshooting 
+## Error: Hostname doesn't match
+If you get an exception like this: <br>
+```
+NODES UNKNOWN: urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='localhost', port=6443): Max retries exceeded with url: /api/v1/nodes (Caused by SSLError(SSLCertVerificationError("hostname 'localhost' doesn't match either of '<redacted>', 'kubernetes', 'kubernetes.default', 'kubernetes.default.svc', 'kubernetes.default.svc.cluster.local', '<redacted>', '<redacted>'")))
+```
+check the "server" line under "cluster" ``kube-config`` and replace localhost with one of names in the error message.
+<br>
